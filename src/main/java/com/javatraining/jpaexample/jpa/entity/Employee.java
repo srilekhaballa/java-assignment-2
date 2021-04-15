@@ -4,19 +4,36 @@ package com.javatraining.jpaexample.jpa.entity;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "employee")
 public class Employee {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) // auto-increment
     private Integer empid;
     private String name;
     private String email;
     private String phone;
     private String created_by;
     private Date created_on;
+
+    public Employee(int i, String string, String string2, String string3, String string4, Date date) {
+        this.empid = i;
+        this.name = string;
+        this.email = string2;
+        this.phone = string3;
+        this.created_by = string4;
+        this.created_on = date;
+    }
+
+    public Employee() {
+        // TODO Auto-generated constructor stub
+    }
+
 
     public Integer getEmpid() {
         return empid;
