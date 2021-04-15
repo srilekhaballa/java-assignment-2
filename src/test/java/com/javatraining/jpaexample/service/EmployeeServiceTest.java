@@ -1,25 +1,21 @@
 package com.javatraining.jpaexample.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
+import com.javatraining.jpaexample.JpaExampleApplicationTests;
 import com.javatraining.jpaexample.dao.EmployeeDao;
 import com.javatraining.jpaexample.jpa.entity.Employee;
 
-@SpringBootTest
-public class EmployeeServiceTest {
+public class EmployeeServiceTest extends JpaExampleApplicationTests {
+
+
 
     @Mock
     EmployeeDao employeeDao;
@@ -27,15 +23,6 @@ public class EmployeeServiceTest {
     @InjectMocks
     EmployeeService employeeService;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @LocalServerPort
-    private int port;
-
-    private String getRootUrl() {
-        return "http://localhost:" + port;
-    }
 
 
     @Test
@@ -56,6 +43,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void testGetById() {
+
         Employee e1 = new Employee();
         e1.setEmpid(1);
 
@@ -66,39 +54,35 @@ public class EmployeeServiceTest {
         assertNotNull(employeeService.getEmployeeById(1));
     }
 
-
     @Test
-    public void testDeleteEmployee() {
-        int id = 2;
-        Employee employee = restTemplate.getForObject(getRootUrl() + "/employees/" + id, Employee.class);
-        assertNotNull(employee);
-        restTemplate.delete(getRootUrl() + "/employees/" + id);
-        try {
-            employee = restTemplate.getForObject(getRootUrl() + "/employees/" + id, Employee.class);
-        } catch (final HttpClientErrorException e) {
-            assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
-        }
+    public void testdeleteEmployee() {
+
+        employeeService.deleteEmployee(1);
+        verify(employeeDao, times(1)).deleteById(1);
+
     }
 
     @Test
-    public void testCreateEmployee() {
-        Employee employee = new Employee();
-        employee.setEmail("admin@gmail.com");
-        employee.setName("admin");
+    public void testcreateEmployee() {
 
-        ResponseEntity<Employee> postResponse = restTemplate.postForEntity(getRootUrl() + "/employees", employee, Employee.class);
-        assertNotNull(postResponse);
-        assertNotNull(postResponse.getBody());
+        Employee e1 = new Employee();
+        e1.setEmpid(1);
+
+        employeeService.createEmployee(e1);
+        verify(employeeDao, times(1)).save(e1);
+
     }
 
     @Test
-    public void testUpdateEmployee() {
-        int id = 1;
-        Employee employee = restTemplate.getForObject(getRootUrl() + "/employees/" + id, Employee.class);
-        employee.setName("admin1");
-        restTemplate.put(getRootUrl() + "/employees/" + id, employee);
-        Employee updatedEmployee = restTemplate.getForObject(getRootUrl() + "/employees/" + id, Employee.class);
-        assertNotNull(updatedEmployee);
+    public void testupdateEmployee() {
+
+        Employee e1 = new Employee();
+        e1.setEmpid(1);
+
+        employeeService.updateEmployee(e1);
+        verify(employeeDao, times(1)).save(e1);
+
     }
+
 
 }
