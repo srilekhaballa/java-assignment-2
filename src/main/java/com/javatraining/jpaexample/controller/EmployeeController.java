@@ -36,7 +36,7 @@ public class EmployeeController {
         return new ResponseEntity(employeeService.getEmployeeById(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteEmployee")
+    @DeleteMapping("/deleteEmployee/{id}")
     public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Integer id) {
         Employee employee = employeeService.getEmployeeById(id);
         employeeService.deleteEmployee(id);
@@ -47,11 +47,13 @@ public class EmployeeController {
 
 
     @PostMapping("/createEmployee")
-    public void createEmployee(@Valid @RequestBody Employee employee) {
+    public void createEmployee(@RequestBody Employee employee) {
+
         employeeService.createEmployee(employee);
+
     }
 
-    @PutMapping("/updateEmployee")
+    @PutMapping("/updateEmployee/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Integer id, @Valid @RequestBody Employee employeeDetails) {
         Employee employee = employeeService.getEmployeeById(id);
         employee.setEmail(employeeDetails.getEmail());
