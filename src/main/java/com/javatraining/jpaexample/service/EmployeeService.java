@@ -33,6 +33,17 @@ public class EmployeeService {
 
     }
 
+    public Employee updateEmployee(Employee employee) {
 
+        Employee e1 = employeeDao.findById(employee.getEmpid())
+                .get();
+        e1.setEmail(employee.getEmail());
+        e1.setName(employee.getName());
+        e1.setPhone(employee.getPhone());
+        e1.setCreated_on(employee.getCreated_on());
+        e1.setCreated_by(employee.getCreated_by());
+        return employeeDao.save(e1);
+
+    }
 
 }
