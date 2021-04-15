@@ -27,9 +27,9 @@ public class EmployeeService {
 
     }
 
-    public void saveEmployee(Employee employee) {
+    public Employee createEmployee(Employee employee) {
 
-        employeeDao.save(employee);
+        return employeeDao.save(employee);
 
     }
 
