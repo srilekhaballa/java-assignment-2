@@ -54,8 +54,6 @@ public class EmployeeController {
     @PutMapping("/updateEmployee")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Integer id, @Valid @RequestBody Employee employeeDetails) {
         Employee employee = employeeService.getEmployeeById(id);
-
-
         employee.setEmail(employeeDetails.getEmail());
         employee.setName(employeeDetails.getName());
         employee.setPhone(employeeDetails.getPhone());
